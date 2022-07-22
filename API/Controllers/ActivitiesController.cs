@@ -19,7 +19,9 @@ namespace API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<List<Activity>>> GetActivities(){
-            return await _context.Activities.ToListAsync();
+            List<Activity> Activities = await _context.Activities.ToListAsync();
+            List<Activity> SortedActivities = Activities.OrderBy(o=>o.Title).ToList();
+            return SortedActivities;
         }
 
         [HttpGet("{id}")]
