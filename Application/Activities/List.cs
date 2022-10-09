@@ -23,7 +23,7 @@ namespace Application.Activities
 
         public async Task<List<Activity>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _context.Activities.ToListAsync(cancellationToken); // using Microsoft.EntityFrameworkCore
+                return await _context.Activities.OrderBy(o=>o.Title).ToListAsync(cancellationToken); // using Microsoft.EntityFrameworkCore
             }
         }
         /* Example of how to handle a cancellation token in case the user cancels the request during the api call
