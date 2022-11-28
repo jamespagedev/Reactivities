@@ -7,6 +7,10 @@ import ActivityForm from "../../features/activities/form/ActivityForm";
 import { observer } from "mobx-react-lite";
 import { Route, Routes as Switch, useLocation } from "react-router-dom";
 import RouteView from "./RouteView";
+import TestErrors from "../../features/errors/TestError";
+import { ToastContainer } from "react-toastify";
+import NotFound from "../../features/errors/NotFound";
+import ServerError from "../../features/errors/ServerError";
 
 function App() {
   // const location = useLocation(); // react-router v6 requires a different fix
@@ -14,6 +18,7 @@ function App() {
 
   return (
     <>
+      <ToastContainer position="bottom-right" hideProgressBar />
       {pathname !== "/" && <NavBar />}
       {/* Note: Needs better structure for react-router v6 */}
       <Switch>
@@ -45,6 +50,30 @@ function App() {
             key={i}
           />
         ))}
+        <Route
+          path="/errors"
+          element={
+            <RouteView>
+              <TestErrors />
+            </RouteView>
+          }
+        />
+        <Route
+          path="/server-error"
+          element={
+            <RouteView>
+              <ServerError />
+            </RouteView>
+          }
+        />
+        <Route
+          path="/*"
+          element={
+            <RouteView>
+              <NotFound />
+            </RouteView>
+          }
+        />
       </Switch>
     </>
   );
