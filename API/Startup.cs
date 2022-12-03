@@ -8,6 +8,8 @@ using Application.Activities;
 using Application.Core;
 using FluentValidation.AspNetCore;
 using MediatR;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,11 +31,15 @@ namespace API
         _config = config;
     }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+    // This method gets called by the runtime. Use this method to add services to the container.
+    public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<Create>());
+            services.AddControllers() // AuthorizationFilter has been removed from Microsoft.AspNetCore.Mvc.Authorization
+                .AddFluentValidation(config => {
+                    config.RegisterValidatorsFromAssemblyContaining<Create>();
+                });
             services.AddApplicationServices(_config);
+            services.AddIdentityServices(_config);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +58,7 @@ namespace API
 
             app.UseCors("CorsPolicy");
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
