@@ -1,5 +1,7 @@
 using Application.Activities;
 using Application.Core;
+using Application.Interfaces;
+using Infrastructure.Security;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +30,7 @@ namespace API.Extensions
             });
             services.AddMediatR(typeof(List.Handler).Assembly); // where the handlers are located
             services.AddAutoMapper(typeof(MappingProfiles).Assembly); // MediatR and AutoMapper are made by the same author
+            services.AddScoped<IUserAccessor, UserAccessor>();
 
             return services;
         }
