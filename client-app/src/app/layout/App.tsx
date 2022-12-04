@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NavBar from "./NavBar";
 import HomePage from "../../features/home/HomePage";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
@@ -11,14 +11,31 @@ import TestErrors from "../../features/errors/TestError";
 import { ToastContainer } from "react-toastify";
 import NotFound from "../../features/errors/NotFound";
 import ServerError from "../../features/errors/ServerError";
+import LoginForm from "../../features/users/LoginForm";
+import { useStore } from "../stores/store";
+import LoadingComponent from "./LoadingComponent";
+import ModalContainer from "../common/modals/ModalContainer";
 
 function App() {
   // const location = useLocation(); // react-router v6 requires a different fix
   const { pathname } = useLocation(); // hack for react-router v6 hiding NavBar for HomePage
+  const { commonStore, userStore } = useStore();
+
+  useEffect(() => {
+    if (commonStore.token) {
+      userStore.getUser().finally(() => commonStore.setAppLoaded());
+    } else {
+      commonStore.setAppLoaded();
+    }
+  }, [commonStore, userStore]);
+
+  if (!commonStore.appLoaded)
+    return <LoadingComponent content="Loading app..." />;
 
   return (
     <>
       <ToastContainer position="bottom-right" hideProgressBar />
+      <ModalContainer />
       {pathname !== "/" && <NavBar />}
       {/* Note: Needs better structure for react-router v6 */}
       <Switch>
@@ -63,6 +80,14 @@ function App() {
           element={
             <RouteView>
               <ServerError />
+            </RouteView>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <RouteView>
+              <LoginForm />
             </RouteView>
           }
         />

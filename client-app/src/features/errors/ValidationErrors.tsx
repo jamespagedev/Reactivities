@@ -6,7 +6,7 @@ export default function ValidationErrors({ errors }: Props): JSX.Element {
     <Message error>
       {errors && (
         <Message.List>
-          {errors.map((err: any, i) => (
+          {errors.map((err: any, i: any) => (
             <Message.Item key={i}>{err}</Message.Item>
           ))}
         </Message.List>
@@ -16,5 +16,5 @@ export default function ValidationErrors({ errors }: Props): JSX.Element {
 }
 
 interface Props {
-  errors: Array<string> | null;
+  errors: any;
 }

@@ -1,6 +1,7 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { Activity } from "../models/activity";
+import { User, UserFormValues } from "../models/user";
 import { store } from "../stores/store";
 
 type MyErrorResponse = {
@@ -14,6 +15,12 @@ const sleep = (delay: number) => {
 };
 
 axios.defaults.baseURL = "http://localhost:5000/api";
+
+axios.interceptors.request.use((config: AxiosRequestConfig) => {
+  const token = store.commonStore.token;
+  if (token && config.headers) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
 axios.interceptors.response.use(
   async (response: AxiosResponse) => {
@@ -76,24 +83,34 @@ axios.interceptors.response.use(
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
-const request = {
+const requests = {
   get: <T>(url: string) => axios.get<T>(url).then(responseBody),
-  post: <T>(url: string, body: object) => axios.post<T>(url).then(responseBody),
-  put: <T>(url: string, body: object) => axios.put<T>(url).then(responseBody),
+  post: <T>(url: string, body: object) =>
+    axios.post<T>(url, body).then(responseBody),
+  put: <T>(url: string, body: object) =>
+    axios.put<T>(url, body).then(responseBody),
   delete: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 };
 
 const activities = {
-  list: () => request.get<Array<Activity>>("/activities"),
-  details: (id: string) => request.get<Activity>(`/activities/${id}`),
+  list: () => requests.get<Array<Activity>>("/activities"),
+  details: (id: string) => requests.get<Activity>(`/activities/${id}`),
   create: (activity: Activity) => axios.post<void>("/activities", activity),
   update: (activity: Activity) =>
     axios.put<void>(`/activities/${activity.id}`, activity),
   delete: (id: string) => axios.delete<void>(`/activities/${id}`),
 };
 
+const account = {
+  current: () => requests.get<User>("/account"),
+  login: (user: UserFormValues) => requests.post<User>("/account/login", user),
+  register: (user: UserFormValues) =>
+    requests.post<User>("/account/register", user),
+};
+
 const agent = {
   activities,
+  account,
 };
 
 export default agent;

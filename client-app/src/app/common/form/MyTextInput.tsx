@@ -20,5 +20,6 @@ export default function MyTextInput(props: Props): JSX.Element {
 interface Props {
   placeholder: string;
   name: string;
+  type?: string;
   label?: string;
 }
