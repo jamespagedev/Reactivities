@@ -15,6 +15,7 @@ import LoginForm from "../../features/users/LoginForm";
 import { useStore } from "../stores/store";
 import LoadingComponent from "./LoadingComponent";
 import ModalContainer from "../common/modals/ModalContainer";
+import ProfilePage from "../../features/profiles/ProfilePage";
 
 function App() {
   // const location = useLocation(); // react-router v6 requires a different fix
@@ -67,6 +68,14 @@ function App() {
             key={i}
           />
         ))}
+        <Route
+          path="/profiles/:username"
+          element={
+            <RouteView>
+              <ProfilePage />
+            </RouteView>
+          }
+        />
         <Route
           path="/errors"
           element={
