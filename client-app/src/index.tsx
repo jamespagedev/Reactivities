@@ -8,6 +8,7 @@ import App from "./app/layout/App";
 import reportWebVitals from "./reportWebVitals";
 import { store, StoreContext } from "./app/stores/store";
 import { BrowserRouter } from "react-router-dom";
+import "mobx-react-lite/batchingForReactDom";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <StoreContext.Provider value={store}>
