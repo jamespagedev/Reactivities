@@ -38,7 +38,6 @@ app.MapHub<ChatHub>("/chat");
 // AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); // section 24 may or may not be needed
 
 using var scope = app.Services.CreateScope();
-
 var services = scope.ServiceProvider;
 
 try {

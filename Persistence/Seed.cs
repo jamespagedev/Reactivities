@@ -255,6 +255,34 @@ namespace Persistence
                     }
                 };
 
+                /* ToDo: Figure this out later
+                var photos = new List<Photo>
+                {
+                    new Photo
+                    {
+                        Id = "kudoayr65zvhdlyesjtq",
+                        Url = "https://res.cloudinary.com/dcrcxmbiz/image/upload/v1678894929/kudoayr65zvhdlyesjtq.png",
+                        IsMain = true,
+                    },
+                    new Photo
+                    {
+                        Id = "vb5hfggxicajdvmxwkmr",
+                        Url = "https://res.cloudinary.com/dcrcxmbiz/image/upload/v1678894962/vb5hfggxicajdvmxwkmr.png",
+                        IsMain = true,
+                    },
+                    new Photo
+                    {
+                        Id = "oazxqnpwvwkuye5jlryw",
+                        Url = "https://res.cloudinary.com/dcrcxmbiz/image/upload/v1678895041/oazxqnpwvwkuye5jlryw.png",
+                        IsMain = true,
+                    },
+                };
+
+                for(var i=0; i < users.Count; i++){
+                    users[i].Photos.Add(photos[i]);
+                }
+                */
+
                 await context.Activities.AddRangeAsync(activities);
                 await context.SaveChangesAsync();
             }
