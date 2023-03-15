@@ -1,12 +1,15 @@
 using Application.Activities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // add services to container
-builder.Services.AddControllers() // AuthorizationFilter has been removed from Microsoft.AspNetCore.Mvc.Authorization
-    .AddFluentValidation(config => {
-        config.RegisterValidatorsFromAssemblyContaining<Create>();
-    });
+builder.Services.AddControllers(opt =>
+{
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    opt.Filters.Add(new AuthorizeFilter(policy));
+});
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 
@@ -21,7 +24,7 @@ if (app.Environment.IsDevelopment())
 
 // app.UseHttpsRedirection(); // we are using http
 
-// app.UseRouting(); // dotnet 6 automatically uses this
+// app.UseRouting(); // dotnet 6+ automatically uses this
 
 app.UseCors("CorsPolicy");
 
@@ -32,7 +35,7 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHub<ChatHub>("/chat");
 // app.MapFallbackToController("Index", "Fallback"); // yet to be implemented
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+// AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); // section 24 may or may not be needed
 
 using var scope = app.Services.CreateScope();
 
@@ -48,7 +51,7 @@ try {
     logger.LogError(ex, "An error occured during migration");
 }
 
-await app.RunAsync();
+app.Run();
 
 // ================================ dotnet 5 setup ================================
 // namespace API

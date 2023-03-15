@@ -4,17 +4,14 @@ import "react-calendar/dist/Calendar.css";
 import "react-toastify/dist/ReactToastify.min.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "./app/layout/styles.css";
-import App from "./app/layout/App";
 import reportWebVitals from "./reportWebVitals";
 import { store, StoreContext } from "./app/stores/store";
-import { BrowserRouter } from "react-router-dom";
-import "mobx-react-lite/batchingForReactDom";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./app/router/Routes";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <StoreContext.Provider value={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <RouterProvider router={router} />
   </StoreContext.Provider>
 );
 

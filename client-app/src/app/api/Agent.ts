@@ -1,8 +1,9 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { Activity, ActivityFormValues } from "../models/activity";
 import { Photo, Profile } from "../models/profile";
 import { User, UserFormValues } from "../models/user";
+import { router } from "../router/Routes";
 import { store } from "../stores/store";
 
 type MyErrorResponse = {
@@ -17,7 +18,7 @@ const sleep = (delay: number) => {
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 
-axios.interceptors.request.use((config: AxiosRequestConfig) => {
+axios.interceptors.request.use((config) => {
   const token = store.commonStore.token;
   if (token && config.headers) config.headers.Authorization = `Bearer ${token}`;
   return config;
@@ -29,18 +30,11 @@ axios.interceptors.response.use(
     return response;
   },
   (error: AxiosError<MyErrorResponse>) => {
-    const { data, status, config } = error.response!;
+    const { data, status, config } = error.response as AxiosResponse;
     switch (status) {
       case 400:
-        if (typeof data === "string") toast.error(data);
         if (config.method === "get" && data.errors.hasOwnProperty("id")) {
-          /* react-router-dom v6 does not support passing history in Router
-            so until a better solution comes along,
-            we are implementing the following hack...
-          */
-          window.history.pushState(null, "", "/not-found");
-          window.location.reload();
-          /* end of hack */
+          router.navigate("/not-found");
         }
         if (data.errors) {
           const modalStateErrors = [];
@@ -57,25 +51,16 @@ axios.interceptors.response.use(
       case 401:
         toast.error("unauthorized");
         break;
+      case 403:
+        toast.error("forbidden");
+        break;
       case 404:
         toast.error("not found");
-        /* react-router-dom v6 does not support passing history in Router
-          so until a better solution comes along,
-          we are implementing the following hack...
-        */
-        window.history.pushState(null, "", "/not-found");
-        window.location.reload();
-        /* end of hack */
+        router.navigate("/not-found");
         break;
       case 500:
         store.commonStore.setServerError(data as unknown as never);
-        /* react-router-dom v6 does not support passing history in Router
-          so until a better solution comes along,
-          we are implementing the following hack...
-        */
-        window.history.pushState({}, "Server Error", "/server-error"); // react-router-dom removed history and recommends performing these actions within react lifecycles
-        window.location.reload(); // unfortunatley, this wipes the store and so we cannot see the data with this and currently no fix found
-        /* end of hack */
+        router.navigate("/server-error");
         break;
     }
     return Promise.reject(error);
