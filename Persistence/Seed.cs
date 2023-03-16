@@ -187,7 +187,7 @@ namespace Persistence
                         {
                             new ActivityAttendee
                             {
-                                AppUser = users[0],
+                                AppUser = users[3],
                                 IsHost = true                            
                             },
                             new ActivityAttendee
