@@ -20,19 +20,29 @@ namespace Persistence
                     {
                         DisplayName = "Bob",
                         UserName = "bob",
-                        Email = "bob@test.com"
+                        Email = "bob@test.com",
+                        Photos = new List<Photo>()
                     },
                     new AppUser
                     {
                         DisplayName = "Jane",
                         UserName = "jane",
-                        Email = "jane@test.com"
+                        Email = "jane@test.com",
+                        Photos = new List<Photo>()
                     },
                     new AppUser
                     {
                         DisplayName = "Tom",
                         UserName = "tom",
-                        Email = "tom@test.com"
+                        Email = "tom@test.com",
+                        Photos = new List<Photo>()
+                    },
+                    new AppUser
+                    {
+                        DisplayName = "Diane",
+                        UserName = "diane",
+                        Email = "diane@test.com",
+                        Photos = new List<Photo>()
                     },
                 };
 
@@ -255,25 +265,30 @@ namespace Persistence
                     }
                 };
 
-                /* ToDo: Figure this out later
                 var photos = new List<Photo>
                 {
                     new Photo
                     {
-                        Id = "kudoayr65zvhdlyesjtq",
-                        Url = "https://res.cloudinary.com/dcrcxmbiz/image/upload/v1678894929/kudoayr65zvhdlyesjtq.png",
+                        Id = "ezguwwzekrblf8yp16gw",
+                        Url = "https://res.cloudinary.com/dcrcxmbiz/image/upload/v1678897379/ezguwwzekrblf8yp16gw.png",
                         IsMain = true,
                     },
                     new Photo
                     {
-                        Id = "vb5hfggxicajdvmxwkmr",
-                        Url = "https://res.cloudinary.com/dcrcxmbiz/image/upload/v1678894962/vb5hfggxicajdvmxwkmr.png",
+                        Id = "vgvbydm4fkkqrjkkoysv",
+                        Url = "https://res.cloudinary.com/dcrcxmbiz/image/upload/v1678897425/vgvbydm4fkkqrjkkoysv.png",
                         IsMain = true,
                     },
                     new Photo
                     {
-                        Id = "oazxqnpwvwkuye5jlryw",
-                        Url = "https://res.cloudinary.com/dcrcxmbiz/image/upload/v1678895041/oazxqnpwvwkuye5jlryw.png",
+                        Id = "yupnkp0kb6bnkulgodwj",
+                        Url = "https://res.cloudinary.com/dcrcxmbiz/image/upload/v1678897461/yupnkp0kb6bnkulgodwj.png",
+                        IsMain = true,
+                    },
+                    new Photo
+                    {
+                        Id = "oe3iefcnodz6tczmgfvm",
+                        Url = "https://res.cloudinary.com/dcrcxmbiz/image/upload/v1678938937/oe3iefcnodz6tczmgfvm.png",
                         IsMain = true,
                     },
                 };
@@ -281,7 +296,6 @@ namespace Persistence
                 for(var i=0; i < users.Count; i++){
                     users[i].Photos.Add(photos[i]);
                 }
-                */
 
                 await context.Activities.AddRangeAsync(activities);
                 await context.SaveChangesAsync();
