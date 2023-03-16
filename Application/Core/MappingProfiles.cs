@@ -1,11 +1,11 @@
 using Application.Activities;
 using Application.Comments;
-using AutoMapper;
+using Application.Profiles;
 using Domain;
 
 namespace Application.Core
 {
-    public class MappingProfiles : Profile
+    public class MappingProfiles : AutoMapper.Profile
     {
         public MappingProfiles()
         {
@@ -34,6 +34,13 @@ namespace Application.Core
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.Author.UserName))
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Author.DisplayName))
                 .ForMember(d => d.Image, o => o.MapFrom(s => s.Author.Photos.FirstOrDefault(x => x.IsMain).Url));
+            CreateMap<ActivityAttendee, UserActivityDto>()
+                .ForMember(aa => aa.Id, uad => uad.MapFrom(act => act.Activity.Id))
+                .ForMember(aa => aa.HostUsername, uad => uad.MapFrom(
+                    act => act.Activity.Attendees.FirstOrDefault(att => att.IsHost).AppUser.UserName))
+                .ForMember(aa => aa.Title, uad => uad.MapFrom(act => act.Activity.Title))
+                .ForMember(aa => aa.Category, uad => uad.MapFrom(act => act.Activity.Category))
+                .ForMember(aa => aa.Date, uad => uad.MapFrom(act => act.Activity.Date));
         }
     }
 }
