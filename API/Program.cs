@@ -31,10 +31,13 @@ app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseDefaultFiles(); // plugs into wwwroot folder to serve index.html/index.htm from kestrel server
+app.UseStaticFiles(); // serves content from the wwwroot folder
+
 // app.UseEndpoints(endpoints => {}); // not used for dotnet 6 anymore
 app.MapControllers();
 app.MapHub<ChatHub>("/chat");
-// app.MapFallbackToController("Index", "Fallback"); // yet to be implemented
+app.MapFallbackToController("Index", "Fallback"); // uses FallbackController.cs
 // AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); // section 24 may or may not be needed
 
 using var scope = app.Services.CreateScope();
