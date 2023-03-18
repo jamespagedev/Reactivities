@@ -4,7 +4,7 @@ import { Segment, Header, Comment, Loader } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 import { Link } from "react-router-dom";
 import { Field, FieldProps, Form, Formik } from "formik";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistance } from "date-fns";
 import * as Yup from "yup";
 
 interface Props {
@@ -77,7 +77,10 @@ export default observer(function ActivityDetailedChat({ activityId }: Props) {
                   {comment.displayName}
                 </Comment.Author>
                 <Comment.Metadata>
-                  <div>{formatDistanceToNow(comment.createdAt)} ago</div>
+                  <div>
+                    {formatDistance(new Date(comment.createdAt), new Date())}{" "}
+                    ago
+                  </div>
                 </Comment.Metadata>
                 <Comment.Text style={{ whiteSpace: "pre-wrap" }}>
                   {comment.body}

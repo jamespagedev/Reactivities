@@ -35,7 +35,7 @@ export default class CommentStore {
       this.hubConnection.on("LoadComments", (comments: ChatComment[]) => {
         runInAction(() => {
           comments.forEach((comment) => {
-            comment.createdAt = new Date(comment.createdAt + "Z"); // database not saving with the Z
+            comment.createdAt = new Date(comment.createdAt);
           });
           this.comments = comments;
         });
@@ -44,7 +44,7 @@ export default class CommentStore {
       // match signalR in ChatHub.cs ".SendAsync("ReceiveComment"...);"
       this.hubConnection.on("ReceiveComment", (comment: ChatComment) => {
         runInAction(() => {
-          comment.createdAt = new Date(comment.createdAt); // stream does include the Z
+          comment.createdAt = new Date(comment.createdAt);
           this.comments.unshift(comment);
         });
       });
