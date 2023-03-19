@@ -1,6 +1,6 @@
-# fly.toml file generated for jamespagedev-reactivities-v1 on 2023-03-18T15:21:19-05:00
+# fly.toml file generated for jamespagedev-reactivities-project on 2023-03-18T15:21:19-05:00
 
-app = "jamespagedev-reactivities-v1"
+app = "jamespagedev-reactivities-project"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
@@ -9,7 +9,7 @@ processes = []
   image = "jamespagedev/reactivities:latest"
 
 [env]
-  ASPNETCORE_URLS="https://+:8080"
+  ASPNETCORE_URLS="http://+:8080"
   Cloudinary__CloudName="dcrcxmbiz"
   Cloudinary__ApiKey="413758418348921"
 
