@@ -1,7 +1,8 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
+import FacebookLogin from '@greatsumini/react-facebook-login';
 import { Link } from "react-router-dom";
-import { Button, Container, Header, Image, Segment } from "semantic-ui-react";
+import { Button, Container, Divider, Header, Image, Segment } from "semantic-ui-react";
 import { useStore } from "../../app/stores/store";
 import LoginForm from "../users/LoginForm";
 import RegisterForm from "../users/RegisterForm";
@@ -43,6 +44,22 @@ export default observer(function HomePage(): JSX.Element {
             >
               Register!
             </Button>
+            <Divider horizontal inverted>Or</Divider>
+            <Button 
+              as={FacebookLogin}
+              appId='755040053000264'
+              size='huge'
+              inverted
+              color='facebook'
+              content='Login with Facebook'
+              loading={userStore.fbLoading}
+              onSuccess={(response: any) => {
+                userStore.facebookLogin(response.accessToken);
+              }}
+              onFail={(response: any) => {
+                console.log('Login failed', response)
+              }}
+            />
           </>
         )}
       </Container>
