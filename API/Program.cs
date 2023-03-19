@@ -16,10 +16,36 @@ builder.Services.AddIdentityServices(builder.Configuration);
 // configure the http request pipeline
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
+
+app.UseXContentTypeOptions(); // prevents mime sniffing of content-type
+app.UseReferrerPolicy(opt => opt.NoReferrer()); // refers to how much a site allows the browser to control how much information includes during navigation
+app.UseXXssProtection(opt => opt.EnabledWithBlockMode()); // add cross-site protection header
+app.UseXfo(opt => opt.Deny()); // prevent application being used inside i-frame which protects against click jacking
+// app.UseCspReportOnly( <--- use this instead of "app.UseCsp" below to allow and have the content show up in the browser console
+app.UseCsp(opt => opt
+    .BlockAllMixedContent() // only loads https content(not http content)
+    // allows stylesheets only from our domain as approved content
+    .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com", "https://cdn.jsdelivr.net"))
+    .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "https://cdn.jsdelivr.net", "data:"))
+    .FormActions(s => s.Self())
+    .FrameAncestors(s => s.Self())
+    .ImageSources(s => s.Self().CustomSources("blob:", "https://res.cloudinary.com", "https://platform-lookaside.fbsbx.com"))
+    .ScriptSources(s => s.Self())
+); // whitesource approved content against cross-scripting attacks
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
+}
+else
+{
+    // app.UseHsts() <-- doesn't seem to work on production application
+    // so we create one ourselves instead
+    app.Use(async (context, next) => {
+        context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000"); // 1 year of max-age
+        await next.Invoke();
+    });
 }
 
 // app.UseHttpsRedirection(); // we are using http
