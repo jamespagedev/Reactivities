@@ -25,12 +25,13 @@ app.UseXfo(opt => opt.Deny()); // prevent application being used inside i-frame 
 app.UseCsp(opt => opt
     .BlockAllMixedContent() // only loads https content(not http content)
     // allows stylesheets only from our domain as approved content
-    .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com", "https://cdn.jsdelivr.net"))
+    .StyleSources(s => s.Self()
+        .CustomSources("https://fonts.googleapis.com", "https://cdn.jsdelivr.net", "sha256-e6v1SBY0/nWORF0cSCN2iKUc90hYDPlQUe8okJKLZcY="))
     .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "https://cdn.jsdelivr.net", "data:"))
     .FormActions(s => s.Self())
     .FrameAncestors(s => s.Self())
-    .ImageSources(s => s.Self().CustomSources("blob:", "https://res.cloudinary.com", "https://platform-lookaside.fbsbx.com"))
-    .ScriptSources(s => s.Self())
+    .ImageSources(s => s.Self().CustomSources("blob:", "data:", "https://res.cloudinary.com", "https://platform-lookaside.fbsbx.com"))
+    .ScriptSources(s => s.Self().CustomSources("https://connect.facebook.net"))
 ); // whitesource approved content against cross-scripting attacks
 
 if (app.Environment.IsDevelopment())
