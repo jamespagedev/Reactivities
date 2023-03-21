@@ -1,3 +1,5 @@
 {
-    "editor.parameterHints.enabled": false
+    "editor.parameterHints.enabled": false,
+    "editor.tabSize": 2,
+    "editor.stickyTabStops": false
 }

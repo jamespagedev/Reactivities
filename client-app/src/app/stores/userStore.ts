@@ -50,14 +50,15 @@ export default class UserStore {
 
   register = async (creds: UserFormValues) => {
     try {
-      const user = await agent.account.register(creds);
-      store.commonStore.setToken(user.token);
-      this.startRefreshTokenTimer(user);
-      runInAction(() => (this.user = user));
-      router.navigate("/activities");
+      await agent.account.register(creds);
+      // store.commonStore.setToken(user.token);
+      // this.startRefreshTokenTimer(user);
+      // runInAction(() => (this.user = user));
+      router.navigate(`/account/registerSuccess?email=${creds.email}`);
       store.modalStore.closeModal();
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      if (error?.response?.status === 400) throw error;
+      console.log(error);
     }
   };
 
@@ -80,9 +81,9 @@ export default class UserStore {
         this.fbLoading = false;
       });
       router.navigate("/activities");
-    } catch(error) {
+    } catch (error) {
       console.log(error);
-      runInAction(() => this.fbLoading = false);
+      runInAction(() => (this.fbLoading = false));
     }
   };
 
@@ -90,18 +91,18 @@ export default class UserStore {
     this.stopRefreshTokenTimer();
     try {
       const user = await agent.account.refreshToken();
-      runInAction(() => this.user = user);
+      runInAction(() => (this.user = user));
       store.commonStore.setToken(user.token);
       this.startRefreshTokenTimer(user);
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   };
 
   private startRefreshTokenTimer(user: User) {
-    const jwtToken = JSON.parse(atob(user.token.split('.')[1]));
+    const jwtToken = JSON.parse(atob(user.token.split(".")[1]));
     const expires = new Date(jwtToken.exp * 1000);
-    const timeout = expires.getTime() - Date.now() - (60 * 1000); // 60 seconds before token expires
+    const timeout = expires.getTime() - Date.now() - 60 * 1000; // 60 seconds before token expires
     this.refreshTokenTimeout = setTimeout(this.refreshToken, timeout);
   }
 
