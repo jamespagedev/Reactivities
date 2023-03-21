@@ -21,6 +21,7 @@ namespace Persistence
                         DisplayName = "Bob",
                         UserName = "bob",
                         Email = "bob@test.com",
+                        EmailConfirmed = true,
                         Photos = new List<Photo>()
                     },
                     new AppUser
@@ -28,6 +29,7 @@ namespace Persistence
                         DisplayName = "Jane",
                         UserName = "jane",
                         Email = "jane@test.com",
+                        EmailConfirmed = true,
                         Photos = new List<Photo>()
                     },
                     new AppUser
@@ -35,6 +37,7 @@ namespace Persistence
                         DisplayName = "Tom",
                         UserName = "tom",
                         Email = "tom@test.com",
+                        EmailConfirmed = true,
                         Photos = new List<Photo>()
                     },
                     new AppUser
@@ -42,6 +45,7 @@ namespace Persistence
                         DisplayName = "Diane",
                         UserName = "diane",
                         Email = "diane@test.com",
+                        EmailConfirmed = true,
                         Photos = new List<Photo>()
                     },
                 };

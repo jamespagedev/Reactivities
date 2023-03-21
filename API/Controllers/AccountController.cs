@@ -18,13 +18,15 @@ namespace API.Controllers
     public class AccountController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
         private readonly TokenService _tokenService;
         private readonly IConfiguration _config;
         private readonly HttpClient _fbHttpClient;
-        public AccountController(UserManager<AppUser> userManager, TokenService tokenService, IConfiguration config)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, TokenService tokenService, IConfiguration config)
         {
-            _tokenService = tokenService;
             _userManager = userManager;
+            _signInManager = signInManager;
+            _tokenService = tokenService;
             _config = config;
             _fbHttpClient = new HttpClient
             {
@@ -39,17 +41,19 @@ namespace API.Controllers
             var user = await _userManager.Users.Include(p => p.Photos)
                 .FirstOrDefaultAsync(x => x.Email == loginDto.Email);
 
-            if (user == null) return Unauthorized();
+            if (user == null) return Unauthorized("Invalid email");
 
-            var results = await _userManager.CheckPasswordAsync(user, loginDto.Password);
+            if (!user.EmailConfirmed) return Unauthorized("Email not confirmed");
 
-            if (results)
+            var results = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+
+            if (results.Succeeded)
             {
                 await SetRefreshToken(user);
                 return CreateUserObject(user);
             }
 
-            return Unauthorized();
+            return Unauthorized("Invalid password");
         }
 
         [AllowAnonymous]
