@@ -26,7 +26,7 @@ app.UseCsp(opt => opt
     .BlockAllMixedContent() // only loads https content(not http content)
     // allows stylesheets only from our domain as approved content
     .StyleSources(s => s.Self()
-        .CustomSources("https://fonts.googleapis.com", "https://cdn.jsdelivr.net", "sha256-e6v1SBY0/nWORF0cSCN2iKUc90hYDPlQUe8okJKLZcY="))
+        .CustomSources("https://fonts.googleapis.com", "https://cdn.jsdelivr.net", "sha256-DpOoqibK/BsYhobWHnU38Pyzt5SjDZuR/mFsAiVN7kk=")) // hash requires update every "npm run build"
     .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "https://cdn.jsdelivr.net", "data:"))
     .FormActions(s => s.Self())
     .FrameAncestors(s => s.Self())

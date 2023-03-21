@@ -117,7 +117,7 @@ namespace API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("resentEmailConfirmationLink")]
+        [HttpGet("resendEmailConfirmationLink")]
         public async Task<ActionResult> ResendEmailConfirmationLink(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
